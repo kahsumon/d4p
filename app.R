@@ -95,11 +95,16 @@ ui <- dashboardPage(
     tabItems(
       # First tab content
       tabItem(tabName = "extremist",
-              HTML("<h1><font color ='black'><center><b>Extremist Profiles</b> </center></font></h1>"),
+              HTML("<h1><font color ='black'><center><b>Analysis: Extremist Profiles</b> </center></font></h1>"),
               fluidRow(
-                
-                column(1),#downloadButton("downloadExt","Download")#),
-                column(10, DT::dataTableOutput('tbl_a')),
+                column(1),
+                column(10,
+                         tabBox(width = 12,
+                         tabPanel("Tab1", DT::dataTableOutput('tbl_a')),
+                         tabPanel("Tab2", "Tab content 2")
+                       )
+                       
+                       ),
                 column(1)
                 
               )
@@ -109,18 +114,29 @@ ui <- dashboardPage(
       tabItem(tabName = "incident",
               HTML("<h1><font color ='black'><center><b>Violent Event Profiles</b> </center></font></h1>"),
               fluidRow(
-                column(1),#downloadButton("downloadEve","Download")),
-                column(10, DT::dataTableOutput('tbl_b')),
+                column(1),
+                column(10,
+                       tabBox(width = 12,
+                              tabPanel("Tab1", DT::dataTableOutput('tbl_b')),
+                              tabPanel("Tab2", "Tab content 2")
+                       )
+                       
+                ),
                 column(1)
-                
               )
       ),
       # Third tab content
       tabItem(tabName = "organaization",
               HTML("<h1><font color ='black'><center><b>Organaizational Profiles</b> </center></font></h1>"),
               fluidRow(
-                column(1),#downloadButton("downloadOrg","Download")),
-                column(10, DT::dataTableOutput('tbl_c')),
+                column(1),
+                column(10,
+                       tabBox(width = 12,
+                              tabPanel("Tab1", DT::dataTableOutput('tbl_c')),
+                              tabPanel("Tab2", "Tab content 2")
+                       )
+                       
+                ),
                 column(1)
                 
               )
@@ -130,20 +146,27 @@ ui <- dashboardPage(
               HTML("<h1><font color ='black'><center><b>Events, Extremists & Outfits : Network Analysis</b> </center></font></h1>"),
               
               fluidRow(
-                visNetworkOutput("network")  
-              )
+                
+                column(1),
+                column(10,
+                       visNetworkOutput("network")),
+                column(1)
+                      
+                )
       ),
       #Tab : Orgnanizational Timeline
       tabItem(tabName = "OrgTL",
               HTML("<h1><font color ='black'><center><b>Organizational Timeline</b></center></font></h1>"),
               
               fluidRow(
+                
                 column(1),
                 column(10, 
                        timevisOutput("mytime"),
                        actionButton("btn", "Reset")),
                 column(1)
-                      )
+                      
+                )
       
       
       
@@ -169,7 +192,7 @@ server <- function(input, output) {
                                 )),
           
                                 searchHighlight = TRUE,
-                                pageLength=5,
+                                pageLength=1,
                                 scrollX= TRUE)
                               )
                               
@@ -202,7 +225,7 @@ server <- function(input, output) {
                                            )),
                                            
                                            searchHighlight = TRUE,
-                                           pageLength=5,
+                                           pageLength=4,
                                            scrollX= TRUE)
                                          ) %>% formatDate('Date',method = "toDateString")})
   output$downloadExt <- downloadHandler(

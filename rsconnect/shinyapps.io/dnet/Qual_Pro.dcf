@@ -5,8 +5,8 @@ account: dnet
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 472377
-bundleId: 1608356
+bundleId: 1770276
 url: https://dnet.shinyapps.io/Qual_Pro/
-when: 1538027095.05142
+when: 1545125256.59285
 asMultiple: FALSE
 asStatic: FALSE
