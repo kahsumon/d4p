@@ -6,6 +6,7 @@ library(readxl)
 library(visNetwork)
 library(xlsx)
 library(timevis)
+library(networkD3)
 
 nodes <- read_excel("./data/Nodes.xlsx")
 edges <- read_excel("./data/Edges.xlsx")
@@ -99,9 +100,9 @@ ui <- dashboardPage(
               fluidRow(
                 column(1),
                 column(10,
-                         tabBox(width = 12,
+                         tabsetPanel(
                          tabPanel("Tab1", DT::dataTableOutput('tbl_a')),
-                         tabPanel("Tab2", "Tab content 2")
+                         tabPanel("Tab2", sankeyNetworkOutput("plot"))
                        )
                        
                        ),
@@ -116,7 +117,7 @@ ui <- dashboardPage(
               fluidRow(
                 column(1),
                 column(10,
-                       tabBox(width = 12,
+                       tabsetPanel(
                               tabPanel("Tab1", DT::dataTableOutput('tbl_b')),
                               tabPanel("Tab2", "Tab content 2")
                        )
@@ -131,7 +132,7 @@ ui <- dashboardPage(
               fluidRow(
                 column(1),
                 column(10,
-                       tabBox(width = 12,
+                       tabsetPanel(
                               tabPanel("Tab1", DT::dataTableOutput('tbl_c')),
                               tabPanel("Tab2", "Tab content 2")
                        )
@@ -276,6 +277,49 @@ server <- function(input, output) {
       centerItem("item1")
   })
   
+  
+  #Backend Code Start: Extremist Sankey Relational Chart
+  
+  
+ node = data.frame("name" = 
+                       c("Educational Background", # Node 0
+                         "Bangla Medium", # Node 1
+                         "English Medium", # Node 2
+                         "Madrasha Medium",
+                         "Introvert",
+                         "Extrovert",
+                         "Shirt,Pants",
+                         "Panjabi, Pajama",
+                         "Bearded face",
+                         "Clean Shaven face"))# Node 3
+  link = as.data.frame(matrix(c(
+    0, 1, 10, # Each row represents a link. The first number
+    0, 2, 20, # represents the node being conntected from. 
+    0, 3, 30, # the second number represents the node connected to.
+    1, 4, 10,
+    4, 6, 14,
+    4, 7, 10,
+    1, 5, 20,
+    5, 6, 12,
+    2, 4, 15,
+    2, 5, 17,
+    3, 4, 6,
+    3, 5, 13,
+    7, 8, 15,
+    6, 8, 3,
+    6, 9, 5
+    
+  ),# The third number is the value of the node
+  byrow = TRUE, ncol = 3))
+  names(link) = c("source", "target", "value")
+  output$plot <- renderSankeyNetwork({
+  sankeyNetwork(Links = link, Nodes = node,
+                Source = "source", Target = "target",
+                Value = "value", NodeID = "name",
+                fontSize= 12, nodeWidth = 30)
+  })
+  
+  #Backend Code End: Extremist Sankey Relational Chart
 }
 
 shinyApp(ui, server)
