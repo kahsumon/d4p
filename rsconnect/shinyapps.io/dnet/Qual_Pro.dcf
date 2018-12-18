@@ -1,0 +1,12 @@
+name: Qual_Pro
+title: Qual_Pro
+username:
+account: dnet
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 472377
+bundleId: 1608356
+url: https://dnet.shinyapps.io/Qual_Pro/
+when: 1538027095.05142
+asMultiple: FALSE
+asStatic: FALSE

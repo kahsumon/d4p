@@ -1,0 +1,12 @@
+name: Qual_Pro
+title: Qual_Pro
+username:
+account: kazi
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 472414
+bundleId: 1698232
+url: https://kazi.shinyapps.io/Qual_Pro/
+when: 1542113435.0547
+asMultiple: FALSE
+asStatic: FALSE
