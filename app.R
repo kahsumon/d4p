@@ -1,4 +1,6 @@
 ## app.R ##
+
+#Library
 library(shinydashboard)
 library(shiny)
 library(DT)
@@ -7,16 +9,33 @@ library(visNetwork)
 library(xlsx)
 library(timevis)
 library(networkD3)
+library(leaflet)
 
+
+
+#Dtat Source#
 nodes <- read_excel("./data/Nodes.xlsx")
 edges <- read_excel("./data/Edges.xlsx")
-Extremist_List <- read_excel("./data/Extremist_List.xlsx", sheet= 'Sheet1')
+#Extremist_List <- read_excel("./data/Extremist_List.xlsx", sheet= 'Sheet1')
 Extremist <- read_excel("./data/Network_Database.xlsx", sheet= 'Extremist_Profile')
 Event <- read_excel("./data/Network_Database.xlsx", sheet= 'Violent_Event_Profile')
 Organization <- read_excel("./data/Network_Database.xlsx", sheet= 'Organizational_Profile')
 or<-data.frame(Organization)
 ex<-data.frame(Extremist[,1:40])
 ev<-data.frame(Event)
+
+#map data source#
+Data<-read_excel("C:/Users/Sumon/Google Drive/Dnet/QualitativeResearch/data/latlng.xlsx")
+
+#icon buildup
+icons <- awesomeIcons(
+  icon = 'ios-body',
+  iconColor = 'red',
+  library = 'ion',
+  markerColor = 'blue'
+)
+
+
 #Data : Organizational Timeline
 templateWC <-function(stage, team1) {
   if(stage=="Neo JMB"){
@@ -102,7 +121,9 @@ ui <- dashboardPage(
                 column(10,
                          tabsetPanel(
                          tabPanel("Tab1", DT::dataTableOutput('tbl_a')),
-                         tabPanel("Tab2", sankeyNetworkOutput("plot"))
+                         tabPanel("Tab2", sankeyNetworkOutput("plot")),
+                         tabPanel("Tab2", actionButton("reset_button", "Reset view"),
+                                          leafletOutput("mymap", width = "100%", height = 600))
                        )
                        
                        ),
@@ -320,6 +341,29 @@ server <- function(input, output) {
   })
   
   #Backend Code End: Extremist Sankey Relational Chart
+  
+  
+  
+  #Backend Code Start: Leaflet Map
+  initial_lat = 23.684994
+  initial_lng = 90.35633099999995
+  initial_zoom = 6.5
+  
+  output$mymap <- renderLeaflet({ 
+    
+    leaflet() %>% setView(lng = initial_lng, lat = initial_lat, zoom = 7) %>%
+      addTiles(attribution = "Extremist Permanent Address Data © 2018 Data for Peace") %>%  # Add default OpenStreetMap map tiles
+      addAwesomeMarkers(lng=Data$lng, lat=Data$lat, popup=paste(Data$Name,Data$PermanentAddress,sep = "<br/>Permanent Address: "),icon = icons) 
+    
+  })                            
+  
+  observe({
+    input$reset_button
+    leafletProxy("mymap") %>% setView(lat = initial_lat, lng = initial_lng, zoom = initial_zoom)
+    
+  })
+  
+  #Backednd Code End: Leaflet Map
 }
 
 shinyApp(ui, server)

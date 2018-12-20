@@ -5,8 +5,8 @@ account: kazi
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 472414
-bundleId: 1770284
+bundleId: 1771124
 url: https://kazi.shinyapps.io/Qual_Pro/
-when: 1545125549.71076
+when: 1545149775.78802
 asMultiple: FALSE
 asStatic: FALSE
